@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const {graphqlExpress, graphiqlExpress } = require('apollo-server-express');
 const {makeExecutableSchema, addMockFunctionsToSchema, MockList } = require('graphql-tools');
+const casual = require('casual');
+
 
 const typeDefs = `
 type Query {cards : [Card!]! }
@@ -10,9 +12,9 @@ type Query {cards : [Card!]! }
 type Card {
  id : String!
  name : String!
- lastname : String!
- role: String!
- age: String
+ title : String!
+ imgSrc: String!
+ imgAlt: String
  text: String
  tag: String
 }
@@ -26,6 +28,28 @@ typeDefs,
 resolvers
 });
 
+const mocks ={
+Query: ()=> ({
+   cards: () => new MockList([5, 30]),
+}),
+Card: () => ({
+    id : casual.uuid,
+    title : casual.title,
+    name : casual.name,
+    imgSrc: 'https://picsum.photos/600/300/?image='+casual.integer(900, 916),
+    imgAlt: 'Image',
+    tag : 'article',
+    text: casual.sentense,
+}),
+
+};
+
+addMockFunctionsToSchema({
+  schema,
+  mocks,
+  preserveResolvers: true
+
+});
 
 const app = express();
 
