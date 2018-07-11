@@ -1,4 +1,4 @@
-This is an attempt to create graphQL server inside docker container with express server. 
+<b>This is an attempt to create graphQL server inside docker container with express server. </b>
 
 docker-machine start 
 docker-machine ls ==> will give ip of docker host.
